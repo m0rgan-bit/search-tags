@@ -1,0 +1,24 @@
+name: searchtags
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.8
+    container_name: tags-clickhouse
+    ports:
+      - "8123:8123"   # HTTP
+      - "9000:9000"   # native (его использует Go-сервис)
+    environment:
+      CLICKHOUSE_DB: tags_db
+      CLICKHOUSE_USER: app
+      CLICKHOUSE_PASSWORD: app
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    volumes:
+      - ch_data:/var/lib/clickhouse
+      # сюда кладём logs.parquet, чтобы читать его через file('logs.parquet')
+      - ./data:/var/lib/clickhouse/user_files
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+
+volumes:
+  ch_data:

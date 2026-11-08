@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Поисковые теги</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #1c1e21; }
+    main { max-width: 640px; margin: 48px auto; padding: 0 16px; }
+    form { display: flex; gap: 8px; }
+    input[type=search] { flex: 1; padding: 10px 12px; font-size: 16px; border: 1px solid #c4c8ce; border-radius: 8px; }
+    button { padding: 10px 18px; font-size: 16px; border: 0; border-radius: 8px; background: #2563eb; color: #fff; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+    ul.tags { list-style: none; padding: 0; margin: 16px 0; display: flex; flex-wrap: wrap; gap: 8px; }
+    ul.tags a { display: inline-block; padding: 6px 12px; border-radius: 999px; background: #e5edff; color: #1e40af; text-decoration: none; }
+    ul.tags a:hover { background: #d3e0ff; }
+    .users { font-size: 12px; color: #6b7280; margin-left: 4px; }
+    .empty { color: #6b7280; margin-top: 16px; }
+    .error { color: #b91c1c; margin-top: 16px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Поиск</h1>
+  <form method="get" action="/">
+    <input type="search" name="q" value="{{.Query}}" placeholder="Например: платье" autofocus>
+    <button type="submit">Найти</button>
+  </form>
+
+  {{if .Error}}
+    <p class="error">{{.Error}}</p>
+  {{else if .Searched}}
+    {{if .Tags}}
+      <ul class="tags">
+        {{range .Tags}}
+          <li><a href="/?q={{.Tag}}">{{.Tag}}</a><span class="users">{{.Users}}</span></li>
+        {{end}}
+      </ul>
+    {{else}}
+      <p class="empty">Для этого запроса пока нет тегов.</p>
+    {{end}}
+  {{end}}
+</main>
+</body>
+</html>
